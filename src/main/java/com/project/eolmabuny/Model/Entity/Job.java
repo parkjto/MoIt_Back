@@ -32,9 +32,6 @@ public class Job {
     @Column(name = "workplace_name", length = 100)
     private String workplaceName;
 
-    @Column(length = 20)
-    private String color;
-
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
