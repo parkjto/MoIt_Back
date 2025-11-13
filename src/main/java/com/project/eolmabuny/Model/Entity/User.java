@@ -19,12 +19,14 @@ public class User {
     @Column(name = "user_id")
     private Long userId;
 
+    @Setter
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
     @Column(nullable = false, length = 255)
     private String password;
 
+    @Setter
     @Column(nullable = false, length = 50)
     private String nickname;
 
@@ -51,5 +53,10 @@ public class User {
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+    }
+
+    //나중에 수정
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
