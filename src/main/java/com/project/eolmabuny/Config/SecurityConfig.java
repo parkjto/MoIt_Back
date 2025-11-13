@@ -21,6 +21,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/**").permitAll()  // <- API 경로 모두 허용!
                         .anyRequest().authenticated()
                 )
                 .httpBasic(basic -> {});
