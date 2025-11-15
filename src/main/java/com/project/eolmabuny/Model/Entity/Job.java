@@ -5,6 +5,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "job")
@@ -18,6 +19,9 @@ public class Job {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "job_id")
     private Long jobId;
+
+    @Column(name = "job_uuid", unique = true, nullable = false, updatable = false)
+    private String jobUuid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -42,5 +46,8 @@ public class Job {
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+        if (jobUuid == null) {
+            jobUuid = UUID.randomUUID().toString();
+        }
     }
 }
