@@ -1,7 +1,7 @@
 package com.project.eolmabuny.Controller;
 
-import com.project.eolmabuny.DTO.Comment.CommentResponseDto;
 import com.project.eolmabuny.DTO.Comment.CommentRequestDto;
+import com.project.eolmabuny.DTO.Comment.CommentResponseDto;
 import com.project.eolmabuny.Service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,15 +21,16 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<CommentResponseDto> createComment(
             @RequestBody CommentRequestDto requestDto,
-            @RequestParam Long userId) {  // <- userId를 파라미터로 받음
+            @RequestParam Long userId) {
         CommentResponseDto responseDto = commentService.createComment(requestDto, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    // 게시글별 댓글 조회
-    @GetMapping("/post/{postId}")
-    public ResponseEntity<List<CommentResponseDto>> getCommentsByPost(@PathVariable Long postId) {
-        List<CommentResponseDto> responseDtos = commentService.getCommentsByPost(postId);
+    // 게시글별 댓글 조회 - UUID 사용!
+    @GetMapping("/post/{postUuid}")  // {postId} -> {postUuid}
+    public ResponseEntity<List<CommentResponseDto>> getCommentsByPost(
+            @PathVariable String postUuid) {  // Long postId -> String postUuid
+        List<CommentResponseDto> responseDtos = commentService.getCommentsByPost(postUuid);
         return ResponseEntity.ok(responseDtos);
     }
 

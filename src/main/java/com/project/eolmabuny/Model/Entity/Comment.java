@@ -20,7 +20,7 @@ public class Comment {
     private Long commentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "post_uuid", nullable = false)  // post_id -> post_uuid
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)

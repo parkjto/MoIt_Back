@@ -8,8 +8,9 @@ import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
+
     // 특정 게시글의 댓글 조회 (최상위 댓글만)
-    List<Comment> findByPost_PostIdAndParentCommentIsNullOrderByCreatedAtAsc(Long postId);
+    List<Comment> findByPost_PostUuidAndParentCommentIsNullOrderByCreatedAtAsc(String postUuid);  // PostId -> PostUuid
 
     // 특정 댓글의 대댓글 조회
     List<Comment> findByParentComment_CommentIdOrderByCreatedAtAsc(Long parentCommentId);

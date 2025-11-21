@@ -1,7 +1,7 @@
 package com.project.eolmabuny.Service;
 
 import com.project.eolmabuny.DTO.Post.PostRequestDto;
-import com.project.eolmabuny.DTO.Post.PostResponseDto;
+import com.project.eolmabuny.DTO.PostResponseDto;
 import com.project.eolmabuny.Model.Entity.Post;
 import com.project.eolmabuny.Model.Entity.PostLike;
 import com.project.eolmabuny.Model.Entity.PostLikeId;
@@ -45,8 +45,8 @@ public class PostService {
 
     // 게시글 단건 조회 (조회수 증가)
     @Transactional
-    public PostResponseDto getPost(Long postId, Long userId) {
-        Post post = postRepository.findById(postId)
+    public PostResponseDto getPost(String postUuid, Long userId) {  // Long -> String
+        Post post = postRepository.findById(postUuid)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
 
         // 조회수 증가
@@ -73,8 +73,8 @@ public class PostService {
 
     // 게시글 수정
     @Transactional
-    public PostResponseDto updatePost(Long postId, Long userId, PostRequestDto requestDto) {
-        Post post = postRepository.findById(postId)
+    public PostResponseDto updatePost(String postUuid, Long userId, PostRequestDto requestDto) {  // Long -> String
+        Post post = postRepository.findById(postUuid)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
 
         // 작성자 확인
@@ -82,9 +82,9 @@ public class PostService {
             throw new IllegalArgumentException("게시글 수정 권한이 없습니다.");
         }
 
-        // 수정 (Setter 필요 - Entity에 추가 필요)
+        // 수정
         Post updatedPost = Post.builder()
-                .postId(post.getPostId())
+                .postUuid(post.getPostUuid())
                 .user(post.getUser())
                 .category(requestDto.getCategory() != null ? requestDto.getCategory() : post.getCategory())
                 .title(requestDto.getTitle() != null ? requestDto.getTitle() : post.getTitle())
@@ -101,8 +101,8 @@ public class PostService {
 
     // 게시글 삭제
     @Transactional
-    public void deletePost(Long postId, Long userId) {
-        Post post = postRepository.findById(postId)
+    public void deletePost(String postUuid, Long userId) {  // Long -> String
+        Post post = postRepository.findById(postUuid)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
 
         // 작성자 확인
@@ -115,14 +115,14 @@ public class PostService {
 
     // 좋아요 토글 (추가/취소)
     @Transactional
-    public PostResponseDto toggleLike(Long postId, Long userId) {
-        Post post = postRepository.findById(postId)
+    public PostResponseDto toggleLike(String postUuid, Long userId) {  // Long -> String
+        Post post = postRepository.findById(postUuid)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        PostLikeId postLikeId = new PostLikeId(userId, postId);
+        PostLikeId postLikeId = new PostLikeId(userId, postUuid);  // Long, String
 
         // 이미 좋아요를 눌렀으면 취소, 안 눌렀으면 추가
         if (postLikeRepository.existsById(postLikeId)) {
@@ -141,13 +141,13 @@ public class PostService {
 
     // Entity -> DTO 변환
     private PostResponseDto convertToResponseDto(Post post, Long currentUserId) {
-        long likeCount = postLikeRepository.countByPost_PostId(post.getPostId());
+        long likeCount = postLikeRepository.countByPost_PostUuid(post.getPostUuid());
         boolean isLiked = currentUserId != null &&
-                postLikeRepository.existsByUser_UserIdAndPost_PostId(currentUserId, post.getPostId());
+                postLikeRepository.existsByUser_UserIdAndPost_PostUuid(currentUserId, post.getPostUuid());
         long commentCount = post.getComments().size();
 
         return PostResponseDto.builder()
-                .postId(post.getPostId())
+                .postUuid(post.getPostUuid())
                 .userId(post.getUser().getUserId())
                 .nickname(post.getUser().getNickname())
                 .category(post.getCategory())

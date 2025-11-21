@@ -20,9 +20,9 @@ public class PostLike {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @MapsId("postId")
+    @MapsId("postUuid")  // postId -> postUuid
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_uuid")
     private Post post;
 
     @Column(name = "created_at", nullable = false, updatable = false)

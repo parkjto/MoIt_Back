@@ -1,4 +1,4 @@
-package com.project.eolmabuny.DTO.Post;
+package com.project.eolmabuny.DTO;
 
 import lombok.*;
 import java.time.LocalDateTime;
@@ -10,11 +10,11 @@ import java.time.LocalDateTime;
 @Builder
 public class PostResponseDto {
 
-    private Long postId;
+    private String postUuid;  // Long postId -> String postUuid
 
     private Long userId;
 
-    private String nickname;  // 작성자 닉네임
+    private String nickname;
 
     private String category;
 
@@ -26,11 +26,11 @@ public class PostResponseDto {
 
     private Integer viewCount;
 
-    private Long likeCount;  // 좋아요 수
+    private Long likeCount;
 
-    private Boolean isLiked;  // 현재 사용자가 좋아요 눌렀는지
+    private Boolean isLiked;
 
-    private Long commentCount;  // 댓글 수
+    private Long commentCount;
 
     private LocalDateTime createdAt;
 }

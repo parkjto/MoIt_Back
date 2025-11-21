@@ -9,11 +9,9 @@ import lombok.*;
 @Builder
 public class CommentRequestDto {
 
-    //private Long userId;
+    private String postUuid;  // Long postId -> String postUuid
 
-    private Long postId;
-
-    private Long parentCommentId;  // null이면 댓글, 값이 있으면 대댓글
+    private Long parentCommentId;
 
     private String content;
 }

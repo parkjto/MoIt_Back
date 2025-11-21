@@ -30,7 +30,7 @@ public class CommentService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        Post post = postRepository.findById(requestDto.getPostId())
+        Post post = postRepository.findById(requestDto.getPostUuid())  // String postUuid
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
 
         Comment parentComment = null;
@@ -51,10 +51,10 @@ public class CommentService {
     }
 
     // 게시글별 댓글 조회 (대댓글 포함)
-    public List<CommentResponseDto> getCommentsByPost(Long postId) {
+    public List<CommentResponseDto> getCommentsByPost(String postUuid) {  // Long -> String
         // 최상위 댓글만 조회
         List<Comment> comments = commentRepository
-                .findByPost_PostIdAndParentCommentIsNullOrderByCreatedAtAsc(postId);
+                .findByPost_PostUuidAndParentCommentIsNullOrderByCreatedAtAsc(postUuid);
 
         return comments.stream()
                 .map(this::convertToResponseDtoWithReplies)
@@ -80,7 +80,7 @@ public class CommentService {
                 .commentId(comment.getCommentId())
                 .userId(comment.getUser().getUserId())
                 .nickname(comment.getUser().getNickname())
-                .postId(comment.getPost().getPostId())
+                .postUuid(comment.getPost().getPostUuid())
                 .parentCommentId(comment.getParentComment() != null ?
                         comment.getParentComment().getCommentId() : null)
                 .content(comment.getContent())
@@ -95,7 +95,7 @@ public class CommentService {
                 .commentId(comment.getCommentId())
                 .userId(comment.getUser().getUserId())
                 .nickname(comment.getUser().getNickname())
-                .postId(comment.getPost().getPostId())
+                .postUuid(comment.getPost().getPostUuid())
                 .parentCommentId(comment.getParentComment() != null ?
                         comment.getParentComment().getCommentId() : null)
                 .content(comment.getContent())

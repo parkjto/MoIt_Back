@@ -1,7 +1,7 @@
 package com.project.eolmabuny.Controller;
 
 import com.project.eolmabuny.DTO.Post.PostRequestDto;
-import com.project.eolmabuny.DTO.Post.PostResponseDto;
+import com.project.eolmabuny.DTO.PostResponseDto;
 import com.project.eolmabuny.Service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,17 +21,17 @@ public class PostController {
     @PostMapping
     public ResponseEntity<PostResponseDto> createPost(
             @RequestBody PostRequestDto requestDto,
-            @RequestParam Long userId) {  // <- userId를 파라미터로 받음
+            @RequestParam Long userId) {
         PostResponseDto responseDto = postService.createPost(requestDto, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    // 게시글 단건 조회
-    @GetMapping("/{id}")
+    // 게시글 단건 조회 - UUID 사용!
+    @GetMapping("/{uuid}")  // {id} -> {uuid}
     public ResponseEntity<PostResponseDto> getPost(
-            @PathVariable Long id,
+            @PathVariable String uuid,  // Long id -> String uuid
             @RequestParam(required = false) Long userId) {
-        PostResponseDto responseDto = postService.getPost(id, userId);
+        PostResponseDto responseDto = postService.getPost(uuid, userId);
         return ResponseEntity.ok(responseDto);
     }
 
@@ -52,31 +52,31 @@ public class PostController {
         return ResponseEntity.ok(responseDtos);
     }
 
-    // 게시글 수정
-    @PutMapping("/{id}")
+    // 게시글 수정 - UUID 사용!
+    @PutMapping("/{uuid}")  // {id} -> {uuid}
     public ResponseEntity<PostResponseDto> updatePost(
-            @PathVariable Long id,
+            @PathVariable String uuid,  // Long id -> String uuid
             @RequestParam Long userId,
             @RequestBody PostRequestDto requestDto) {
-        PostResponseDto responseDto = postService.updatePost(id, userId, requestDto);
+        PostResponseDto responseDto = postService.updatePost(uuid, userId, requestDto);
         return ResponseEntity.ok(responseDto);
     }
 
-    // 게시글 삭제
-    @DeleteMapping("/{id}")
+    // 게시글 삭제 - UUID 사용!
+    @DeleteMapping("/{uuid}")  // {id} -> {uuid}
     public ResponseEntity<Void> deletePost(
-            @PathVariable Long id,
+            @PathVariable String uuid,  // Long id -> String uuid
             @RequestParam Long userId) {
-        postService.deletePost(id, userId);
+        postService.deletePost(uuid, userId);
         return ResponseEntity.noContent().build();
     }
 
-    // 좋아요 토글
-    @PostMapping("/{id}/like")
+    // 좋아요 토글 - UUID 사용!
+    @PostMapping("/{uuid}/like")  // {id} -> {uuid}
     public ResponseEntity<PostResponseDto> toggleLike(
-            @PathVariable Long id,
+            @PathVariable String uuid,  // Long id -> String uuid
             @RequestParam Long userId) {
-        PostResponseDto responseDto = postService.toggleLike(id, userId);
+        PostResponseDto responseDto = postService.toggleLike(uuid, userId);
         return ResponseEntity.ok(responseDto);
     }
 }

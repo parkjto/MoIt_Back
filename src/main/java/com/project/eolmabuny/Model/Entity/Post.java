@@ -5,6 +5,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "post")
@@ -15,9 +16,8 @@ import java.util.List;
 public class Post {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id")
-    private Long postId;
+    @Column(name = "post_uuid", length = 36)
+    private String postUuid;  // UUID를 PK로 사용
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -52,6 +52,9 @@ public class Post {
 
     @PrePersist
     protected void onCreate() {
+        if (postUuid == null) {
+            postUuid = UUID.randomUUID().toString();
+        }
         createdAt = LocalDateTime.now();
     }
 

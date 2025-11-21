@@ -15,9 +15,9 @@ public class CommentResponseDto {
 
     private Long userId;
 
-    private String nickname;  // 작성자 닉네임
+    private String nickname;
 
-    private Long postId;
+    private String postUuid;  // Long postId -> String postUuid
 
     private Long parentCommentId;
 
@@ -25,5 +25,5 @@ public class CommentResponseDto {
 
     private LocalDateTime createdAt;
 
-    private List<CommentResponseDto> replies;  // 대댓글 목록
+    private List<CommentResponseDto> replies;
 }
